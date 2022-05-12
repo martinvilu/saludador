@@ -1,0 +1,25 @@
+#!/bin/bash
+echo "--$(date '+%F-%T')---------" >> check
+cat usuarios.txt | while read line || [[ -n $line ]];
+do
+	echo "https://github.com/$line/$line"
+	status=$(curl -s -o /dev/null -I -w "%{http_code}" "https://raw.githubusercontent.com/$line/$line/main/README.md")
+	echo $(date '+%F-%T'),$line,$status >> check
+    if test $status -eq "201"
+	then
+		echo ">>>>OK $line"
+		gh repo fork --clone $line/$line
+		cd $line
+		 echo "![Badge](https://bit.ly/icom-badge)" >> README.md
+		 git add README.md
+		 git commit -m "Hola alumno!"
+		 git push
+		 gh pr create --title "Agregado automático de un mensaje" --body "Este es un pull request automático para agregar un aporte a su perfil en GitHub" 
+		cd ..
+		gh repo delete martinvilu/$line --confirm
+	else
+		echo $line >> reintento
+	fi
+	
+done
+echo "--$(date '+%F-%T')---------" >> check
