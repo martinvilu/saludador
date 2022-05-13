@@ -5,7 +5,7 @@ do
 	echo "https://github.com/$line/$line"
 	status=$(curl -s -o /dev/null -I -w "%{http_code}" "https://raw.githubusercontent.com/$line/$line/main/README.md")
 	echo $(date '+%F-%T'),$line,$status >> check
-    if test $status -eq "201"
+    if test $status -eq "200"
 	then
 		echo ">>>>OK $line"
 		gh repo fork --clone $line/$line
