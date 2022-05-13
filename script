@@ -16,7 +16,8 @@ do
 		 git push
 		 gh pr create --title "Agregado automático de un mensaje" --body "Este es un pull request automático para agregar un aporte a su perfil en GitHub" 
 		cd ..
-		gh repo delete martinvilu/$line --confirm
+		echo "Estamos en: $(pwd)"
+		echo "gh repo delete martinvilu/$line --confirm" >> cleanup
 	else
 		echo $line >> reintento
 	fi
