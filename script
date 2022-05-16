@@ -1,5 +1,14 @@
 #!/bin/bash
-echo "--$(date '+%F-%T')---------" >> check
+if test $1 -eq "--PR"
+then
+    echo "creando pull requests para modificar los repositorios"
+    activo="200"
+else
+    echo "solo visitando los repositorios y registrando los estados"
+    activo="1000"
+fi
+
+echo "--$(date '+%F-%T')-[$activo]--------" >> check
 echo "fecha,usuario,readme,repo,usuario">> check
 cat usuarios.txt | while read line || [[ -n $line ]];
 do
@@ -9,7 +18,7 @@ do
 	status=$(curl -s -o /dev/null -I -w "%{http_code}" "https://raw.githubusercontent.com/$line/$line/main/README.md")
 	
 	echo $(date '+%F-%T'),$line,$status,$repo_s,$user_s >> check
-    if test $status -eq "200"
+    if test $status -eq $activo
 	then
 		echo ">>>>OK $line"
 		gh repo fork --clone $line/$line
