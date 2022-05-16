@@ -1,11 +1,15 @@
 #!/bin/bash
 echo "--$(date '+%F-%T')---------" >> check
+echo "fecha,usuario,readme,repo,usuario">> check
 cat usuarios.txt | while read line || [[ -n $line ]];
 do
 	echo "https://github.com/$line/$line"
+	user_s=$(curl -s -o /dev/null -I -w "%{http_code}" "https://github.com/$line")
+	repo_s=$(curl -s -o /dev/null -I -w "%{http_code}" "https://github.com/$line/$line")
 	status=$(curl -s -o /dev/null -I -w "%{http_code}" "https://raw.githubusercontent.com/$line/$line/main/README.md")
-	echo $(date '+%F-%T'),$line,$status >> check
-    if test $status -eq "200"
+	
+	echo $(date '+%F-%T'),$line,$status,$repo_s,$user_s >> check
+    if test $status -eq "201"
 	then
 		echo ">>>>OK $line"
 		gh repo fork --clone $line/$line
