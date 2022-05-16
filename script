@@ -16,9 +16,9 @@ do
 		cd $line
 		 echo "![Badge](https://bit.ly/icom-badge)" >> README.md
 		 git add README.md
-		 git commit -m "Hola alumno!"
+		 git commit -m "Agregado del badge de la carrera al perfil."
 		 git push
-		 gh pr create --title "Agregado automático de un mensaje" --body "Este es un pull request automático para agregar un aporte a su perfil en GitHub" 
+		 gh pr create --title "Agregado automático del badge" --body "Este es un pull request automático para agregar el badge a su perfil en GitHub" 
 		cd ..
 		echo "Estamos en: $(pwd)"
 		echo "gh repo delete martinvilu/$line --confirm" >> cleanup
